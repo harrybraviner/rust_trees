@@ -16,6 +16,14 @@ impl BinaryTree<'_> {
             _ => {},
         }
     }
+
+    pub fn from_children<'a>(left_link: Option<&'a BinaryTree>, right_link: Option<&'a BinaryTree>, payload: &'a i32) -> BinaryTree<'a> {
+        BinaryTree {
+            left_link: left_link,
+            right_link: right_link,
+            payload,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -84,5 +92,27 @@ mod tests {
         let t1 = BinaryTree { left_link: None, right_link: None, payload: &1i32 };
         let t2 = BinaryTree { left_link: None, right_link: None, payload: &2i32 };
         let _t3 = BinaryTree { left_link: Some(&t1), right_link: Some(&t2), payload: &0i32 };
+    }
+
+    #[test]
+    fn call_fn_that_briefly_makes_tree() {
+        // Goal here is to provoke a problem by having references that live longer than the tree
+        // holding them.
+        
+        fn use_trees(left_tree: BinaryTree, right_tree: BinaryTree) {
+            
+            let t = BinaryTree {
+                left_link: Some(& left_tree),
+                right_link: Some(& right_tree),
+                payload: &0i32,
+            };
+
+            t.inorder_travsersal(&mut |_| {});    // Do nothing.
+        }
+
+        let t1 = BinaryTree { left_link: None, right_link: None, payload: &1i32 };
+        let t2 = BinaryTree { left_link: None, right_link: None, payload: &2i32 };
+
+        use_trees(t1, t2);
     }
 }
