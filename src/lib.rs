@@ -41,15 +41,41 @@ mod tests {
         let mut traversal_record : Vec<i32> = vec![];
 
         let mut store_traversal = |x: &i32| { traversal_record.push(x.clone()) };
-        
-        let two_nodes = BinaryTree {
-            left_link: None,
-            right_link: Some(&BinaryTree{left_link: None, right_link: None, payload: &1i32}),
+
+        // many_nodes is this tree:
+        //         0
+        //        / \
+        //       4   2
+        //      /   / \
+        //     3   1   5
+        let many_nodes = BinaryTree {
+            left_link: Some(&BinaryTree{
+                left_link: Some(&BinaryTree{
+                    left_link: None,
+                    right_link: None,
+                    payload: &3i32,
+                }),
+                right_link: None,
+                payload: &4i32,
+            }),
+            right_link: Some(&BinaryTree{
+                left_link: Some(&BinaryTree{
+                    left_link: None,
+                    right_link: None,
+                    payload: &1i32,
+                }),
+                right_link: Some(&BinaryTree {
+                    left_link: None,
+                    right_link: None,
+                    payload: &5i32
+                }),
+                payload: &2i32,
+            }),
             payload: &0i32
         };
 
-        two_nodes.inorder_travsersal(&mut store_traversal);
+        many_nodes.inorder_travsersal(&mut store_traversal);
 
-        assert_eq!(traversal_record, vec![0i32, 1i32]);
+        assert_eq!(traversal_record, vec![3i32, 4i32, 0i32, 1i32, 2i32, 5i32]);
     }
 }
