@@ -78,4 +78,11 @@ mod tests {
 
         assert_eq!(traversal_record, vec![3i32, 4i32, 0i32, 1i32, 2i32, 5i32]);
     }
+
+    #[test]
+    fn construct_in_stages() {
+        let t1 = BinaryTree { left_link: None, right_link: None, payload: &1i32 };
+        let t2 = BinaryTree { left_link: None, right_link: None, payload: &2i32 };
+        let _t3 = BinaryTree { left_link: Some(&t1), right_link: Some(&t2), payload: &0i32 };
+    }
 }
